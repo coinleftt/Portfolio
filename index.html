@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<!-- saved from url=(0023)https://inithabits.com/ -->
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coinleft</title>
+  <meta name="description"
+    content="A portfolio website of Coinleft">
+  <link rel="canonical" href="https://coinleft.tech/">
+  <meta property="og:title" content="Coinleft">
+  <meta property="og:description"
+    content="A portfolio website of Coinleft">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://coinleft.tech/">
+  <meta property="og:image" content="https://coinleft.tech/static/icon-light.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <link rel="icon" type="image/png" href="./static/icon-light.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./static/fonts.css" rel="stylesheet">
+  <link rel="stylesheet" href="./static/style.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .is-loading {
+      overflow: hidden;
+    }
+
+    .is-loading>.theme-toggle,
+    .is-loading>section,
+    .is-loading>footer,
+    .is-loading>script {
+      display: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* --- THEME TOGGLE --- */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--comment);
+      background: var(--bg-alt);
+      border: 1px solid var(--separator);
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeIn 0.3s ease-in forwards;
+      animation-delay: 2s;
+    }
+
+    .theme-toggle:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* --- BOOT SEQUENCE --- */
+    .boot {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 0;
+      position: relative;
+    }
+
+    .boot-line {
+      opacity: 0;
+      animation: fadeIn 0.15s ease-in forwards;
+      color: var(--comment);
+      font-size: 12px;
+    }
+
+    .boot-line .ok {
+      color: var(--accent);
+    }
+
+    .boot-line .ok.loading {
+      color: var(--comment);
+      animation: blink 0.7s step-end infinite;
+    }
+
+    .boot-line:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .boot-line:nth-child(2) {
+      animation-delay: 0.25s;
+    }
+
+    .boot-line:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    .boot-line:nth-child(4) {
+      animation-delay: 0.55s;
+    }
+
+    .boot-line:nth-child(5) {
+      animation-delay: 0.7s;
+    }
+
+    .skip-boot .boot-line {
+      animation: none;
+      opacity: 1;
+    }
+
+    .skip-boot .hero-title,
+    .skip-boot .hero-desc,
+    .skip-boot .hero-audience,
+    .skip-boot .hero-cta,
+    .skip-boot .theme-toggle {
+      animation: none;
+      opacity: 1;
+    }
+
+    .hero-title {
+      opacity: 0;
+      animation: fadeIn 0.4s ease-in forwards;
+      animation-delay: 1s;
+      margin-top: 32px;
+      display: flex;
+      align-items: flex-end;
+      gap: 14px;
+    }
+
+    .hero-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 22.5%;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.3), 0 2px 12px rgba(0, 0, 0, 0.6);
+    }
+
+    [data-theme="light"] .hero-icon {
+      box-shadow: 0 0 0 1px var(--separator), 0 2px 8px rgba(0, 0, 0, 0.12);
+    }
+
+    .hero-title .cmd {
+      color: var(--headers);
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 15px;
+      height: 28px;
+      background: var(--accent);
+      animation: blink 1s step-end infinite;
+      vertical-align: text-bottom;
+      margin-left: 4px;
+      border-radius: 1px;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .hero-desc {
+      opacity: 0;
+      animation: fadeIn 0.4s ease-in forwards;
+      animation-delay: 1.3s;
+      margin-top: 20px;
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .hero-audience {
+      opacity: 0;
+      animation: fadeIn 0.4s ease-in forwards;
+      animation-delay: 1.3s;
+      color: var(--comment);
+      font-size: 15px;
+      margin-top: 8px;
+    }
+
+    .hero-cta {
+      opacity: 0;
+      animation: fadeIn 0.4s ease-in forwards;
+      animation-delay: 1.6s;
+      margin-top: 32px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 10px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.85;
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #FFFFFF;
+    }
+
+    .btn-secondary {
+      background: var(--separator);
+      color: var(--text);
+    }
+
+    /* --- SCROLL INDICATOR --- */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--comment);
+      font-size: 18px;
+      opacity: 0;
+      animation: fadeIn 0.4s ease-in forwards, float 2s ease-in-out infinite;
+      animation-delay: 2s, 2s;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      50% {
+        transform: translateX(-50%) translateY(6px);
+      }
+    }
+
+    /* --- SECTIONS --- */
+    section {
+      padding: 80px 0;
+      border-top: 1px solid var(--separator);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-cmd {
+      color: var(--headers);
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+
+    .section-cmd .prompt {
+      color: var(--accent);
+    }
+
+    .section-cmd .inline-count {
+      color: var(--warn);
+      font-weight: 400;
+      margin-left: 16px;
+    }
+
+    /* --- PREVIEW SECTION --- */
+    .preview-section {
+      padding-bottom: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .preview-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .preview-layout {
+      display: flex;
+      gap: 72px;
+      align-items: flex-start;
+    }
+
+    .preview-phone-wrapper {
+      flex-shrink: 0;
+      width: 300px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .preview-phone-container {
+      position: relative;
+      width: 100%;
+      margin-bottom: -200px;
+    }
+
+    .preview-phone-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 18px rgba(74, 85, 104, 0.25));
+    }
+
+    [data-theme="light"] .preview-phone-container img {
+      filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.28));
+    }
+
+    .preview-theme-toggle {
+      display: flex;
+      gap: 0;
+      margin-bottom: 12px;
+    }
+
+    .preview-theme-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 16px;
+      background: none;
+      border: 1px solid var(--separator);
+      color: var(--comment);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .preview-theme-btn:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    .preview-theme-btn:last-child {
+      border-radius: 0 4px 4px 0;
+      border-left: none;
+    }
+
+    .preview-theme-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #FFFFFF;
+    }
+
+    .preview-theme-btn:not(.active):hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .preview-themes-note {
+      color: var(--comment);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .preview-features {
+      flex: 1;
+      padding-top: 8px;
+    }
+
+    .preview-features .section-cmd {
+      margin-bottom: 20px;
+    }
+
+    /* --- FEATURES --- */
+    .feature-list {
+      list-style: none;
+    }
+
+    .feature-list li {
+      padding: 6px 0;
+      color: var(--comment);
+    }
+
+    .feature-prefix {
+      color: var(--comment);
+    }
+
+    .feature-list li.feature-trust {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .feature-trust-bracket {
+      color: var(--comment);
+    }
+
+    .feature-trust-check {
+      color: var(--accent);
+      font-variant-emoji: text;
+    }
+
+    .comment {
+      color: var(--comment);
+      margin-top: 28px;
+    }
+
+    /* --- DEVLOG TIMELINE --- */
+    .devlog-section {
+      padding-top: 80px;
+      position: relative;
+      z-index: 2;
+      background: var(--bg);
+      transition: background 0.3s ease;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      bottom: 38px;
+      width: 1px;
+      background: var(--separator);
+    }
+
+    .timeline-month {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .timeline-month:last-child {
+      margin-bottom: 0;
+    }
+
+    .timeline-month-label {
+      color: var(--comment);
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .timeline-month-label::before {
+      content: '';
+      position: absolute;
+      left: -23px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--separator);
+      border: 2px solid var(--bg);
+    }
+
+    .timeline-month.current .timeline-month-label::before {
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(52, 196, 138, 0.4);
+    }
+
+    .timeline-month.planned .timeline-month-label::before {
+      background: var(--warn);
+      box-shadow: 0 0 8px rgba(210, 153, 34, 0.4);
+    }
+
+    .timeline-entry {
+      padding: 3px 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .timeline-version {
+      color: var(--accent);
+      font-weight: 500;
+      min-width: 68px;
+      flex-shrink: 0;
+    }
+
+    .timeline-text {
+      color: var(--text);
+    }
+
+    .timeline-latest {
+      color: var(--warn);
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+
+    .timeline-planned-text {
+      color: var(--warn);
+      font-weight: 500;
+    }
+
+
+
+    /* --- BETA ACCESS SECTION --- */
+    .beta-access-section {
+      padding: 80px 0;
+      border-top: 1px solid var(--separator);
+    }
+
+    .perk-row {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--separator);
+      display: flex;
+      gap: 16px;
+      align-items: baseline;
+    }
+
+    .perk-row:last-child {
+      border-bottom: none;
+    }
+
+    .perk-key {
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 500;
+      min-width: 160px;
+      flex-shrink: 0;
+    }
+
+    .perk-val {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* --- SIGNUP --- */
+    .signup-box {
+      margin-top: 24px;
+    }
+
+    .signup-form {
+      display: flex;
+      gap: 8px;
+    }
+
+    .signup-input {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, background 0.3s;
+    }
+
+    .signup-input:focus {
+      border-color: var(--accent);
+    }
+
+    .signup-input.input-error {
+      border-color: var(--red);
+    }
+
+    .signup-input::placeholder {
+      color: var(--comment);
+    }
+
+    .signup-btn {
+      padding: 10px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      background: var(--accent);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .signup-btn:hover {
+      opacity: 0.85;
+    }
+
+    .signup-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* --- PREFERENCE TOGGLE --- */
+    .pref-toggle {
+      margin-top: 12px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      display: inline-block;
+    }
+
+    .pref-toggle:hover .pref-label {
+      color: var(--text);
+    }
+
+    .pref-bracket {
+      color: var(--comment);
+    }
+
+    .pref-check {
+      color: var(--accent);
+      font-variant-emoji: text;
+    }
+
+    .pref-label {
+      color: var(--comment);
+      transition: color 0.15s;
+    }
+
+    .signup-success {
+      color: var(--accent);
+      display: none;
+      margin-top: 20px;
+    }
+
+    .signup-error {
+      color: var(--red);
+      display: none;
+      margin-top: 16px;
+    }
+
+    .signup-comment {
+      color: var(--comment);
+      margin-top: 20px;
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      padding: 48px 0;
+      border-top: 1px solid var(--separator);
+      color: var(--comment);
+      font-size: 12px;
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-line {
+      display: block;
+    }
+
+    .footer-line+.footer-line {
+      margin-top: 2px;
+    }
+
+    .footer-built {
+      display: block;
+      margin-top: 12px;
+    }
+
+    /* --- MOBILE BREAK HELPER --- */
+    .mobile-break {
+      display: none;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        font-size: 13px;
+      }
+
+      .hero-title .cmd {
+        font-size: 22px;
+      }
+
+      .hero-icon {
+        width: 40px;
+        height: 40px;
+      }
+
+      .cursor {
+        height: 22px;
+        width: 12px;
+      }
+
+      .hero-desc,
+      .hero-audience {
+        font-size: 14px;
+      }
+
+      .mobile-break {
+        display: inline;
+      }
+
+      .theme-toggle {
+        top: 12px;
+        right: 12px;
+        font-size: 11px;
+        padding: 5px 10px;
+      }
+
+      /* Preview section mobile */
+      .preview-section {
+        overflow: hidden;
+      }
+
+      .preview-layout {
+        flex-direction: column;
+        gap: 0;
+        align-items: center;
+      }
+
+      .preview-phone-wrapper {
+        width: 260px;
+      }
+
+      .preview-phone-container {
+        margin-bottom: -200px;
+      }
+
+      .preview-features {
+        position: relative;
+        z-index: 2;
+        background: var(--bg);
+        transition: background 0.3s ease;
+        border-top: 1px solid var(--separator);
+        padding-top: 80px;
+        padding-bottom: 80px;
+        width: 100%;
+      }
+
+      /* Beta access mobile */
+      .perk-row {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .perk-key {
+        min-width: 0;
+      }
+    }
+  </style>
+
+</head>
+
+<body class="is-loading">
+
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">$ theme --light</button>
+
+  <div class="container">
+    <div class="boot" id="boot">
+      <div class="boot-line"><span class="ok">[ok]</span> Loading web module</div>
+      <div class="boot-line"><span class="ok">[ok]</span> Loading projects</div>
+      <div class="boot-line"><span class="ok">[ok]</span> Loading system files</div>
+      <div class="boot-line"><span class="ok">[ok]</span> System ready</div>
+      <br>
+
+      <div class="hero-title">
+        <img src="./static/icon-light.png" alt="init.Habits" class="hero-icon" id="heroIconDark">
+        <img src="./static/icon-light.png" alt="init.Habits" class="hero-icon hidden" id="heroIconLight">
+        <span><span class="cmd">Coinleft LFT 👾 </span><span class="cursor"></span></span>
+      </div>
+
+      <div class="hero-desc">
+        Hi, I'm Coinleft...<span class="mobile-break"><br></span> an Indie Hacker<br>
+        who love to build open-source projects.
+      </div>
+
+      <div class="hero-audience">// vibe coding since before the AI era.</div><br>
+
+      <div class="hero-cta">
+        <a href="https://docs.google.com/document/d/1pXGqsDEHiWgUy6plhv07NRJa3bu8gbtSLXlRuF9eJPM/edit?usp=sharing" target="_blank" class="btn btn-primary">view resume →</a>
+        <a href="https://github.com/coinleftt" target="_blank" class="btn btn-secondary">follow the dev →</a>
+      </div>
+
+      <div class="scroll-indicator">↓</div>
+    </div>
+  </div>
+
+  <!-- PREVIEW SECTION -->
+  <section class="preview-section">
+    <div class="preview-container reveal visible">
+      <div class="preview-layout">
+        <div class="preview-phone-wrapper">
+          <div class="preview-theme-toggle">
+            <button class="preview-theme-btn active" id="previewDark" aria-label="Show dark theme">dark</button>
+            <button class="preview-theme-btn" id="previewLight" aria-label="Show light theme">light</button>
+          </div>
+          <a href="https://francium-app.web.app/" target="_blank" style="text-decoration: none;"><div class="preview-themes-note">// Francium: social networking</div></a>
+          <div class="preview-phone-container">
+            <img src="./static/phone-dark.png" alt="init.Habits app in dark mode" id="phoneDark" class="">
+            <img src="./static/phone-light.png" alt="init.Habits app in light mode" id="phoneLight" class="hidden">
+          </div>
+        </div>
+        <div class="preview-features">
+          <div class="section-cmd"><span class="prompt">$ </span>cat features.txt</div>
+          <ul class="feature-list">
+            <li><span class="feature-prefix">&gt; </span>designed to look minimalist and feel aesthetic</li>
+            <li><span class="feature-prefix">&gt; </span>fully open-source</li>
+            <li><span class="feature-prefix">&gt; </span>no infrastructure cost</li>
+            <li><span class="feature-prefix">&gt; </span>3 handcrafted themes + custom settings</li>
+            <li><span class="feature-prefix">&gt; </span>Github-style contribution graph [coming soon]</li>
+            <li><span class="feature-prefix">&gt; </span>home screen widgets [coming soon]</li>
+            <li class="feature-trust"><span class="feature-trust-bracket">[</span><span
+                class="feature-trust-check">✓</span><span class="feature-trust-bracket">]</span> public json data for web scraping and LLM training
+            </li>
+            <li class="feature-trust"><span class="feature-trust-bracket">[</span><span
+                class="feature-trust-check">✓</span><span class="feature-trust-bracket">]</span> cross-platform</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEVLOG TIMELINE -->
+  <section class="devlog-section">
+    <div class="container reveal visible">
+      <div class="section-cmd"><span class="prompt">$ </span>tail -f devlog.txt</div>
+
+      <div class="timeline">
+        <div class="timeline-month">
+          <div class="timeline-month-label">october 2023 - december 2023</div>
+          <div class="timeline-entry">
+            <span class="timeline-version">v0.1</span>
+            <span class="timeline-text">IoT Engineer Intern @ National Cyber City</span>
+          </div>
+          <div class="timeline-entry">
+            <span class="timeline-version"></span>
+            <span class="timeline-latest">[Pyin Oo Lwin, Myanmar]</span>
+          </div>
+        </div>
+
+        <div class="timeline-month">
+          <div class="timeline-month-label">january 2026 - march 2026</div>
+          <div class="timeline-entry">
+            <span class="timeline-version">v0.2</span>
+            <span class="timeline-text">Mathematics &amp; Science Tutor @ De Anza College</span>
+          </div>
+          <div class="timeline-entry">
+            <span class="timeline-version">v0.2.1</span>
+            <span class="timeline-text">CIS Tutor (Computer Informative System) @ De Anza College</span>
+          </div>
+          <div class="timeline-entry">
+            <span class="timeline-version">v0.2.2</span>
+            <span class="timeline-text">IT Intern @ De Anza College</span>
+          </div>
+          <div class="timeline-entry">
+            <span class="timeline-version"></span>
+            <span class="timeline-latest">[Cupertino, CA]</span>
+          </div>
+        </div>
+
+        <div class="timeline-month current">
+          <div class="timeline-month-label">july 2022 - present</div>
+          <div class="timeline-entry">
+            <span class="timeline-version">v0.3</span>
+            <span class="timeline-text">Freelance Programmer & Content Creator @ Coinleft LFT</span>
+          </div>
+          <div class="timeline-entry">
+            <span class="timeline-version"></span>
+            <div class="section-cmd"><span class="timeline-latest">[Remote]</span>&nbsp;[Self-employed]</div>
+          </div>
+        </div>
+
+        <div class="timeline-month current">
+          <div class="timeline-month-label">march 2025 - present</div>
+          <div class="timeline-entry">
+            <span class="timeline-version">v0.4</span>
+            <span class="timeline-text">Robotics & Programming Coach @ Cupertino STEM Lab</span>
+          </div>
+          <div class="timeline-entry">
+            <span class="timeline-version"></span>
+            <span class="timeline-latest">[Cupertino, CA]</span>
+          </div>
+        </div>
+
+        <!-- May — planned -->
+        <div class="timeline-month planned">
+          <div class="timeline-month-label">april 2026</div>
+          <div class="timeline-entry">
+            <span class="timeline-planned-text">searching jobs...</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- WHAT YOU GET -->
+  <section class="beta-access-section">
+    <div class="container reveal visible">
+      <div class="section-cmd"><span class="prompt">$ </span>cat projects.txt</div>
+      <div class="comment" style="margin-top: -16px; margin-bottom: 24px;">// popular open-source projects liked by many users</div>
+
+      <div class="perk-row">
+        <span class="perk-key">&gt; Francium</span>
+        <span class="perk-val"><span style="color: var(--accent);">v1.0 latest</span> — minimalist social networking platform
+        <br><span style="color: var(--headers);">[React.js, TypeScript, Appwrite, Shadcn, PHP]</span></span>
+      </div>
+
+      <div class="perk-row">
+        <span class="perk-key">&gt; LLM-Drop</span>
+        <span class="perk-val"><span style="color: var(--warn);">v1.0 alpha</span> — productivity tool
+        <br><span style="color: var(--headers);">[JavaScript]</span>&nbsp;<span style="color: var(--red);">[Chrome extension]</span></span>
+      </div>
+
+      <div class="perk-row">
+        <span class="perk-key">&gt; Rena</span>
+        <span class="perk-val"><span style="color: var(--warn);">v0.1 beta</span> — AI-powered smart home assistant
+        <br><span style="color: var(--headers);">[Python, JavaScript, Flask, Raspberry Pi]</span></span>
+      </div>
+
+      <div class="perk-row">
+        <span class="perk-key">&gt; C-Slash</span>
+        <span class="perk-val"><span style="color: var(--warn);">v0.1 beta</span> — custom programming language interpreter
+        <br><span style="color: var(--headers);">[C++]</span></span>
+      </div>
+
+      <div class="perk-row">
+        <span class="perk-key">&gt; Sudoku Solver</span>
+        <span class="perk-val"><span style="color: var(--accent);">v1.0 latest</span> — annotative sudoku solver
+        <br><span style="color: var(--headers);">[C++]</span>&nbsp;<span style="color: var(--red);">[Backtracking]</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="beta">
+    <div class="container reveal visible">
+      <div class="section-cmd">
+        <span class="prompt">$ </span>log --todo<span class="inline-count" id="inlineCount">// on-going to-do list</span>
+      </div>
+      <ul class="feature-list">
+        <li class="feature-prefix"><span class="feature-trust-bracket">[</span>
+          <span class="feature-trust-bracket">]</span> build Francium v2
+        </li>
+        <li class="feature-prefix"><span class="feature-trust-bracket">[</span>
+          <span class="feature-trust-bracket">]</span> grind Leetcode problems
+        </li>
+        <li class="feature-prefix"><span class="feature-trust-bracket">[</span>
+          <span class="feature-trust-bracket">]</span> learn AI/ML topics
+        </li>
+        <li class="feature-trust"><span class="feature-trust-bracket">[</span><span
+          class="feature-trust-check">✓</span><span class="feature-trust-bracket">]</span> apply internships
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <span class="footer-line"><a href="https://x.com/coinleftt" target="_blank">x @coinleftt</a> · <a href="https://www.linkedin.com/in/coinleft/" target="_blank">linkedin @coinleft</a></span>
+      <span class="footer-line"><a href="mailto:codejapoe@gmail.com" target="_blank">codejapoe@gmail.com</a>
+      <span class="footer-built">credits to init.Habits</span>
+    </div>
+  </footer>
+
+  <script>
+    // --- SHARED PREVIEW STATE ---
+    var btnDark, btnLight, phoneDark, phoneLight;
+
+    function showPhoneDark() {
+      btnDark.classList.add('active');
+      btnLight.classList.remove('active');
+      phoneDark.classList.remove('hidden');
+      phoneLight.classList.add('hidden');
+    }
+
+    function showPhoneLight() {
+      btnLight.classList.add('active');
+      btnDark.classList.remove('active');
+      phoneLight.classList.remove('hidden');
+      phoneDark.classList.add('hidden');
+    }
+
+    function syncPreviewToTheme() {
+      var isLight = document.documentElement.getAttribute('data-theme') === 'light';
+      if (isLight) {
+        showPhoneLight();
+      } else {
+        showPhoneDark();
+      }
+    }
+
+    // --- THEME TOGGLE ---
+    (function () {
+      var toggle = document.getElementById('themeToggle');
+      var html = document.documentElement;
+      var saved = sessionStorage.getItem('theme');
+      if (saved) {
+        html.setAttribute('data-theme', saved);
+        toggle.textContent = saved === 'light' ? '$ theme --dark' : '$ theme --light';
+      } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        html.setAttribute('data-theme', 'light');
+        toggle.textContent = '$ theme --dark';
+      }
+      // Sync icons to initial theme immediately
+      toggle.addEventListener('click', function () {
+        var current = html.getAttribute('data-theme');
+        if (current === 'light') {
+          html.removeAttribute('data-theme');
+          sessionStorage.setItem('theme', 'dark');
+          toggle.textContent = '$ theme --light';
+        } else {
+          html.setAttribute('data-theme', 'light');
+          sessionStorage.setItem('theme', 'light');
+          toggle.textContent = '$ theme --dark';
+        }
+        syncPreviewToTheme();
+      });
+    })();
+
+    (function () {
+      var body = document.body;
+      var okSpans = document.querySelectorAll('.boot-line .ok');
+      var hasVisited = sessionStorage.getItem('visited');
+
+      if (hasVisited) {
+        body.classList.remove('is-loading');
+        body.classList.add('skip-boot');
+        okSpans.forEach(function (span) {
+          span.textContent = '[ok]';
+          span.classList.remove('loading');
+        });
+        return;
+      }
+
+      okSpans.forEach(function (span) {
+        span.textContent = '[..]';
+        span.classList.add('loading');
+      });
+
+      okSpans.forEach(function (span, index) {
+        setTimeout(function () {
+          span.textContent = '[ok]';
+          span.classList.remove('loading');
+        }, 350 * (index + 1));
+      });
+
+      setTimeout(function () {
+        body.classList.remove('is-loading');
+      }, 350 * (okSpans.length + 2));
+
+      sessionStorage.setItem('visited', '1');
+    })();
+
+    (function () {
+      var reveals = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
+        reveals.forEach(function (el) { observer.observe(el); });
+      } else {
+        reveals.forEach(function (el) { el.classList.add('visible'); });
+      }
+    })();
+
+    // --- PREVIEW THEME TOGGLE ---
+    (function () {
+      btnDark = document.getElementById('previewDark');
+      btnLight = document.getElementById('previewLight');
+      phoneDark = document.getElementById('phoneDark');
+      phoneLight = document.getElementById('phoneLight');
+
+      btnDark.addEventListener('click', function () { showPhoneDark(); });
+      btnLight.addEventListener('click', function () { showPhoneLight(); });
+
+      // Sync preview to current page theme on load
+      syncPreviewToTheme();
+    })();
+  </script>
+
+
+</body>
+
+</html>
