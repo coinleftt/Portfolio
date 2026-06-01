@@ -21,7 +21,6 @@ a featured app, work history, projects, and an ongoing to-do list.
 ## Features
 
 - 🖥️ **Terminal aesthetic** — boot sequence, command-style section headers (`$ cat features.txt`), and a blinking cursor.
-- 🧱 **system24-style panels** — every section is boxed with a 2px border and a title tab that breaks through the top edge.
 - 🌗 **Dark / light themes** — Tokyo Night *Night* and *Day* palettes, toggled with `$ theme --light`. Preference is remembered for the session.
 - 📱 **Live app preview** — an iPhone mockup of the Francium app with its own dark/light switch and a soft fade into the page.
 - ✨ **Scroll reveals & micro-animations** — panels fade in on scroll; subtle hover states on borders and buttons.
@@ -52,23 +51,6 @@ No frameworks, no build step — just the platform.
 │   └── phone-light.png     # App mockup (light)
 └── README.md
 ```
-
-## Running locally
-
-It's a static site, so any local server works. From the project root:
-
-```bash
-# Python
-python3 -m http.server 8000
-
-# or Node
-npx serve .
-```
-
-Then open <http://localhost:8000>.
-
-> **Tip:** open `index.html` *through a server* (not via `file://`) so the relative
-> `./static/...` paths resolve correctly — otherwise the stylesheet and images won't load.
 
 ## Theming
 
