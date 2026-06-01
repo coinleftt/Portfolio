@@ -1,29 +1,35 @@
-*, *::before, *::after { box-sizing: border-box; }
-
-:root {
-  --bg:           #0D1117;
-  --bg-alt:       #161B22;
-  --text:         #E6EDF3;
-  --accent:       #17B8A6;
-  --comment:      #7D8590;
-  --headers:      #58A6FF;
-  --warn:         #D29922;
-  --separator:    #21262D;
-  --red:          #FF6B6B;
-  --input-bg:     #21262D;
-  --input-border: #7D8590;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
+/* Tokyo Night (Night) palette */
+:root {
+    --bg: #1a1b26;
+    --bg-alt: #16161d;
+    --text: #a9b1d6;
+    --accent: #7aa2f7;
+    --comment: #565f89;
+    --headers: #c0caf5;
+    --warn: #e0af68;
+    --separator: #2f334d;
+    --red: #f7768e;
+    --input-bg: #16161d;
+    --input-border: #414868;
+}
+
+/* Tokyo Night Day — light variant */
 [data-theme="light"] {
-  --bg:           #F6F8FA;
-  --bg-alt:       #FFFFFF;
-  --text:         #1F2328;
-  --accent:       #6c63ff;
-  --comment:      #656D76;
-  --headers:      #0969DA;
-  --warn:         #9A6700;
-  --separator:    #D0D7DE;
-  --red:          #CF222E;
-  --input-bg:     #FFFFFF;
-  --input-border: #D0D7DE;
+    --bg: #e1e2e7;
+    --bg-alt: #d0d5e3;
+    --text: #3760bf;
+    --accent: #2e7de9;
+    --comment: #848cb5;
+    --headers: #006a83;
+    --warn: #8c6c3e;
+    --separator: #a8aecb;
+    --red: #f52a65;
+    --input-bg: #d0d5e3;
+    --input-border: #a8aecb;
 }

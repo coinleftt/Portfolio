@@ -60,7 +60,7 @@
     }
 
     .container {
-      max-width: 680px;
+      max-width: 760px;
       margin: 0 auto;
       padding: 0 24px;
     }
@@ -256,6 +256,12 @@
       color: var(--text);
     }
 
+    [data-theme="light"] .btn-secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
     /* --- SCROLL INDICATOR --- */
     .scroll-indicator {
       position: absolute;
@@ -283,8 +289,46 @@
 
     /* --- SECTIONS --- */
     section {
-      padding: 80px 0;
-      border-top: 1px solid var(--separator);
+      padding: 28px 20px;
+    }
+
+    /* --- SYSTEM24 BOXED PANELS --- */
+    :root {
+      --border-thickness: 2px;
+      --border-hover-transition: 0.2s ease;
+    }
+
+    .panel[data-label] {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      border: var(--border-thickness) solid var(--separator);
+      padding: 44px 28px 32px;
+      transition: border-color var(--border-hover-transition);
+    }
+
+    /* title tab that breaks through the top border, system24-style */
+    .panel::before {
+      content: attr(data-label);
+      position: absolute;
+      top: 0;
+      left: 18px;
+      transform: translateY(-50%);
+      background: var(--bg);
+      padding: 0 8px;
+      color: var(--comment);
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      transition: color var(--border-hover-transition), background 0.3s ease;
+    }
+
+    .panel:hover {
+      border-color: var(--accent);
+    }
+
+    .panel:hover::before {
+      color: var(--accent);
     }
 
     .reveal {
@@ -316,20 +360,19 @@
 
     /* --- PREVIEW SECTION --- */
     .preview-section {
-      padding-bottom: 0;
       position: relative;
       z-index: 1;
     }
 
     .preview-container {
-      max-width: 860px;
+      max-width: none;
       margin: 0 auto;
       padding: 0 24px;
     }
 
     .preview-layout {
       display: flex;
-      gap: 72px;
+      gap: 56px;
       align-items: flex-start;
     }
 
@@ -345,18 +388,26 @@
     .preview-phone-container {
       position: relative;
       width: 100%;
-      margin-bottom: -200px;
+      max-height: 400px;
+      overflow: hidden;
+    }
+
+    /* fade the clipped bottom into the background (cross-browser, keeps the PNG transparent) */
+    .preview-phone-container::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 110px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+      pointer-events: none;
     }
 
     .preview-phone-container img {
       width: 100%;
       height: auto;
       display: block;
-      filter: drop-shadow(0 0 18px rgba(74, 85, 104, 0.25));
-    }
-
-    [data-theme="light"] .preview-phone-container img {
-      filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.28));
     }
 
     .preview-theme-toggle {
@@ -447,7 +498,6 @@
 
     /* --- DEVLOG TIMELINE --- */
     .devlog-section {
-      padding-top: 80px;
       position: relative;
       z-index: 2;
       background: var(--bg);
@@ -540,10 +590,7 @@
 
 
     /* --- BETA ACCESS SECTION --- */
-    .beta-access-section {
-      padding: 80px 0;
-      border-top: 1px solid var(--separator);
-    }
+    /* inherits section padding */
 
     .perk-row {
       padding: 12px 0;
@@ -678,8 +725,7 @@
 
     /* --- FOOTER --- */
     footer {
-      padding: 48px 0;
-      border-top: 1px solid var(--separator);
+      padding: 28px 20px 48px;
       color: var(--comment);
       font-size: 12px;
     }
@@ -728,6 +774,22 @@
         font-size: 13px;
       }
 
+      section {
+        padding: 20px 14px;
+      }
+
+      footer {
+        padding: 20px 14px 40px;
+      }
+
+      .panel[data-label] {
+        padding: 40px 18px 28px;
+      }
+
+      .preview-phone-container {
+        max-height: 340px;
+      }
+
       .hero-title .cmd {
         font-size: 22px;
       }
@@ -773,18 +835,12 @@
         width: 260px;
       }
 
-      .preview-phone-container {
-        margin-bottom: -200px;
-      }
-
       .preview-features {
         position: relative;
         z-index: 2;
         background: var(--bg);
         transition: background 0.3s ease;
-        border-top: 1px solid var(--separator);
-        padding-top: 80px;
-        padding-bottom: 80px;
+        padding-top: 32px;
         width: 100%;
       }
 
@@ -838,7 +894,7 @@
 
   <!-- PREVIEW SECTION -->
   <section class="preview-section">
-    <div class="preview-container reveal visible">
+    <div class="preview-container reveal visible panel" data-label="~/francium">
       <div class="preview-layout">
         <div class="preview-phone-wrapper">
           <div class="preview-theme-toggle">
@@ -873,7 +929,7 @@
 
   <!-- DEVLOG TIMELINE -->
   <section class="devlog-section">
-    <div class="container reveal visible">
+    <div class="container reveal visible panel" data-label="~/devlog">
       <div class="section-cmd"><span class="prompt">$ </span>tail -f devlog.txt</div>
 
       <div class="timeline">
@@ -947,7 +1003,7 @@
 
   <!-- WHAT YOU GET -->
   <section class="beta-access-section">
-    <div class="container reveal visible">
+    <div class="container reveal visible panel" data-label="~/projects">
       <div class="section-cmd"><span class="prompt">$ </span>cat projects.txt</div>
       <div class="comment" style="margin-top: -16px; margin-bottom: 24px;">// popular open-source projects liked by many people</div>
 
@@ -990,7 +1046,7 @@
   </section>
 
   <section id="beta">
-    <div class="container reveal visible">
+    <div class="container reveal visible panel" data-label="~/todo">
       <div class="section-cmd">
         <span class="prompt">$ </span>log --todo<span class="inline-count" id="inlineCount">// on-going to-do list</span>
       </div>
@@ -1012,7 +1068,7 @@
   </section>
 
   <footer>
-    <div class="container">
+    <div class="container panel" data-label="~/contact">
       <span class="footer-line"><a href="https://x.com/coinleftt" target="_blank">X @coinleftt</a> · <a href="https://www.linkedin.com/in/coinleft/" target="_blank">LinkedIn @coinleft</a></span>
       <span class="footer-line"><a href="mailto:codejapoe@gmail.com" target="_blank">codejapoe@gmail.com</a>
       <span class="footer-built">credits to init.Habits</span>
