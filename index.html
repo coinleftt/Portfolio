@@ -49,6 +49,7 @@
     }
 
     .is-loading>.theme-toggle,
+    .is-loading>.topnav,
     .is-loading>section,
     .is-loading>footer,
     .is-loading>script {
@@ -67,27 +68,225 @@
 
     /* --- THEME TOGGLE --- */
     .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 100;
+      position: static;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
+      font-size: 13px;
+      font-weight: 500;
       color: var(--comment);
+      text-decoration: none;
+      padding: 6px 14px;
+      z-index: 100;
       background: var(--bg-alt);
       border: 1px solid var(--separator);
-      padding: 6px 12px;
       border-radius: 4px;
       cursor: pointer;
       transition: all 0.3s ease;
       opacity: 0;
-      animation: fadeIn 0.3s ease-in forwards;
-      animation-delay: 2s;
+      animation: fadeIn 0s ease-in forwards;
     }
 
     .theme-toggle:hover {
       color: var(--accent);
       border-color: var(--accent);
+    }
+
+    /* --- TOP NAV --- */
+    .topnav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 90;
+      padding: 12px 24px;
+      opacity: 0;
+      animation: fadeIn 0.4s ease-in forwards;
+      animation-delay: 0s;
+    }
+
+    .skip-boot .topnav {
+      animation: none;
+      opacity: 1;
+    }
+
+    .topnav-inner {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: var(--border-thickness) solid var(--separator);
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      transition: border-color var(--border-hover-transition);
+    }
+
+    /* title tab that breaks through the top border, system24-style */
+    .topnav-inner[data-label]::before {
+      content: attr(data-label);
+      position: absolute;
+      top: 0;
+      left: 18px;
+      transform: translateY(-50%);
+      background: var(--bg);
+      padding: 0 8px;
+      color: var(--comment);
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      transition: color var(--border-hover-transition), background 0.3s ease;
+    }
+
+    .topnav-inner:hover {
+      border-color: var(--accent);
+    }
+
+    .topnav-inner:hover::before {
+      color: var(--accent);
+    }
+
+    .topnav-brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--headers);
+      margin-right: 16px;
+    }
+
+    .topnav-links {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .topnav-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--comment);
+      text-decoration: none;
+      padding: 6px 14px;
+      border-radius: 4px;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .topnav-btn:hover {
+      color: var(--headers);
+      background: color-mix(in srgb, var(--accent) 14%, var(--bg-alt));
+    }
+
+    .topnav-btn.active {
+      color: #FFFFFF;
+      background: var(--accent);
+    }
+
+    .topnav-btn.active:hover {
+      color: #FFFFFF;
+    }
+
+    /* burger — hidden on desktop */
+    .topnav-burger {
+      display: none;
+      margin-left: auto;
+      width: 38px;
+      height: 32px;
+      padding: 8px 9px;
+      flex-direction: column;
+      justify-content: space-between;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      transition: border-color 0.2s ease;
+    }
+
+    .topnav-burger:focus {
+      border-color: transparent;
+    }
+
+    .topnav-burger span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: var(--headers);
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+    }
+
+    .topnav-burger.open span:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+
+    .topnav-burger.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .topnav-burger.open span:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+
+    @media (max-width: 870px) {
+      /* stick flush to the top — no floating box */
+      .topnav {
+        padding: 0;
+      }
+
+      .topnav-inner {
+        flex-wrap: wrap;
+        gap: 0;
+        padding: 10px 16px;
+        border-width: 0 0 var(--border-thickness) 0;
+        border-radius: 0;
+      }
+
+      /* no room for the floating label when flush to the top */
+      .topnav-inner[data-label]::before {
+        display: none;
+      }
+
+      /* don't let the tap/hover state turn the border blue */
+      .topnav-inner:hover {
+        border-color: var(--separator);
+      }
+
+      .topnav-brand {
+        margin-right: 8px;
+      }
+
+      .topnav-burger {
+        display: flex;
+      }
+
+      .topnav-links {
+        flex-basis: 100%;
+        margin-left: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transition: max-height 0.3s ease, opacity 0.25s ease, padding 0.3s ease;
+      }
+
+      .topnav-links.open {
+        max-height: 420px;
+        opacity: 1;
+        padding-top: 8px;
+        border-top: 1px solid var(--separator);
+        margin-top: 4px;
+      }
+
+      .topnav-btn,
+      .topnav-links .theme-toggle {
+        padding: 10px 12px;
+        white-space: nowrap;
+        text-align: left;
+        width: 100%;
+      }
     }
 
     /* --- BOOT SEQUENCE --- */
@@ -813,13 +1012,6 @@
         display: inline;
       }
 
-      .theme-toggle {
-        top: 12px;
-        right: 12px;
-        font-size: 11px;
-        padding: 5px 10px;
-      }
-
       /* Preview section mobile */
       .preview-section {
         overflow: hidden;
@@ -854,16 +1046,51 @@
         min-width: 0;
       }
     }
+
+    .boot-cover {
+      display: block;
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeIn 0.4s ease-in forwards;
+      animation-delay: 0.9s;
+    }
+
+    .skip-boot .boot-cover {
+      animation: none;
+      opacity: 1;
+    }
   </style>
 
 </head>
 
 <body class="is-loading">
 
-  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">$ theme --light</button>
+  <nav class="topnav" id="topnav" aria-label="Primary">
+    <div class="topnav-inner" data-label="nav">
+      <span class="topnav-brand">~/coinleft</span>
+      <button class="topnav-burger" id="navBurger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="topnav-links" id="navLinks">
+        <a href="#boot" class="topnav-btn active">intro</a>
+        <a href="#francium" class="topnav-btn">francium</a>
+        <a href="#devlog" class="topnav-btn">devlog</a>
+        <a href="#projects" class="topnav-btn">projects</a>
+        <a href="#todos" class="topnav-btn">todos</a>
+        <a href="#contact" class="topnav-btn">contact</a>
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">$ theme --light</button>
+      </div>
+    </div>
+  </nav>
+
 
   <div class="container">
     <div class="boot" id="boot">
+      <img src="./static/wallpaper.jpeg" alt="" class="boot-cover">
       <div class="boot-line"><span class="ok">[ok]</span> Loading web module</div>
       <div class="boot-line"><span class="ok">[ok]</span> Loading projects</div>
       <div class="boot-line"><span class="ok">[ok]</span> Loading system files</div>
@@ -892,9 +1119,9 @@
     </div>
   </div>
 
-  <!-- PREVIEW SECTION -->
-  <section class="preview-section">
-    <div class="preview-container reveal visible panel" data-label="~/francium">
+  <!-- FRANCIUM SECTION -->
+  <section class="preview-section" id="francium">
+    <div class="preview-container reveal visible panel" data-label="/francium">
       <div class="preview-layout">
         <div class="preview-phone-wrapper">
           <div class="preview-theme-toggle">
@@ -928,8 +1155,8 @@
   </section>
 
   <!-- DEVLOG TIMELINE -->
-  <section class="devlog-section">
-    <div class="container reveal visible panel" data-label="~/devlog">
+  <section class="devlog-section" id="devlog">
+    <div class="container reveal visible panel" data-label="/devlog">
       <div class="section-cmd"><span class="prompt">$ </span>tail -f devlog.txt</div>
 
       <div class="timeline">
@@ -1002,10 +1229,10 @@
   </section>
 
   <!-- WHAT YOU GET -->
-  <section class="beta-access-section">
-    <div class="container reveal visible panel" data-label="~/projects">
+  <section class="beta-access-section" id="projects">
+    <div class="container reveal visible panel" data-label="/projects">
       <div class="section-cmd"><span class="prompt">$ </span>cat projects.txt</div>
-      <div class="comment" style="margin-top: -16px; margin-bottom: 24px;">// popular open-source projects liked by many people</div>
+      <div class="comment" style="margin-top: -16px; margin-bottom: 24px;">// popular open-source projects loved by many people</div>
 
       <div class="perk-row">
         <a class="perk-key" href="https://github.com/coinleftt/Francium" target="_blank">&gt; Francium</a>
@@ -1045,10 +1272,10 @@
     </div>
   </section>
 
-  <section id="beta">
-    <div class="container reveal visible panel" data-label="~/todo">
+  <section id="todos">
+    <div class="container reveal visible panel" data-label="/todo">
       <div class="section-cmd">
-        <span class="prompt">$ </span>log --todo<span class="inline-count" id="inlineCount">// on-going to-do list</span>
+        <span class="prompt">$ </span>log --todos<span class="inline-count" id="inlineCount">// on-going to-do list</span>
       </div>
       <ul class="feature-list">
         <li class="feature-prefix"><span class="feature-trust-bracket">[</span>
@@ -1067,11 +1294,11 @@
     </div>
   </section>
 
-  <footer>
-    <div class="container panel" data-label="~/contact">
+  <footer id="contact">
+    <div class="container panel" data-label="/contact">
       <span class="footer-line"><a href="https://x.com/coinleftt" target="_blank">X @coinleftt</a> · <a href="https://www.linkedin.com/in/coinleft/" target="_blank">LinkedIn @coinleft</a></span>
       <span class="footer-line"><a href="mailto:codejapoe@gmail.com" target="_blank">codejapoe@gmail.com</a>
-      <span class="footer-built">credits to init.Habits</span>
+      <span class="footer-built">credits to <a href="https://inithabits.com/" target="_blank">init.Habits</a></span>
     </div>
   </footer>
 
@@ -1193,6 +1420,51 @@
 
       // Sync preview to current page theme on load
       syncPreviewToTheme();
+    })();
+
+    // --- TOP NAV SCROLL SPY ---
+    (function () {
+      var navLinks = Array.prototype.slice.call(document.querySelectorAll('.topnav-btn'));
+      var sections = navLinks
+        .map(function (link) { return document.querySelector(link.getAttribute('href')); })
+        .filter(Boolean);
+      if (!sections.length) return;
+
+      function setActive(id) {
+        navLinks.forEach(function (link) {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+
+      sections.forEach(function (section) { observer.observe(section); });
+    })();
+
+    // --- TOP NAV BURGER (mobile) ---
+    (function () {
+      var burger = document.getElementById('navBurger');
+      var links = document.getElementById('navLinks');
+      if (!burger || !links) return;
+
+      function setOpen(open) {
+        burger.classList.toggle('open', open);
+        links.classList.toggle('open', open);
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+
+      burger.addEventListener('click', function () {
+        setOpen(!burger.classList.contains('open'));
+      });
+
+      // close the menu after tapping a nav link
+      links.querySelectorAll('.topnav-btn').forEach(function (link) {
+        link.addEventListener('click', function () { setOpen(false); });
+      });
     })();
   </script>
 
