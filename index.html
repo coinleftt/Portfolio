@@ -32,6 +32,8 @@
 
     html {
       scroll-behavior: smooth;
+      /* allow scrolling but disable pinch-zoom */
+      touch-action: pan-x pan-y;
     }
 
     body {
@@ -75,6 +77,9 @@
       color: var(--comment);
       text-decoration: none;
       padding: 6px 14px;
+      width: calc(16ch + 28px);
+      text-align: center;
+      white-space: nowrap;
       z-index: 100;
       background: var(--bg-alt);
       border: 1px solid var(--separator);
@@ -121,7 +126,7 @@
       background: color-mix(in srgb, var(--bg) 88%, transparent);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      transition: border-color var(--border-hover-transition);
+      transition: border-color var(--border-hover-transition), background 0.3s ease;
     }
 
     /* title tab that breaks through the top border, system24-style */
@@ -1444,6 +1449,17 @@
       }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
 
       sections.forEach(function (section) { observer.observe(section); });
+
+      // scroll to the section on click without writing the hash to the URL
+      navLinks.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          var target = document.querySelector(link.getAttribute('href'));
+          if (!target) return;
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setActive(target.id);
+        });
+      });
     })();
 
     // --- TOP NAV BURGER (mobile) ---
@@ -1466,6 +1482,25 @@
       links.querySelectorAll('.topnav-btn').forEach(function (link) {
         link.addEventListener('click', function () { setOpen(false); });
       });
+    })();
+
+    // --- DISABLE ZOOM ON MOBILE (iOS ignores user-scalable=no) ---
+    (function () {
+      // block pinch-zoom gestures (iOS Safari)
+      ['gesturestart', 'gesturechange', 'gestureend'].forEach(function (evt) {
+        document.addEventListener(evt, function (e) { e.preventDefault(); });
+      });
+      // block multi-finger pinch on touchmove
+      document.addEventListener('touchmove', function (e) {
+        if (e.touches.length > 1) e.preventDefault();
+      }, { passive: false });
+      // block double-tap zoom
+      var lastTouchEnd = 0;
+      document.addEventListener('touchend', function (e) {
+        var now = Date.now();
+        if (now - lastTouchEnd <= 300) e.preventDefault();
+        lastTouchEnd = now;
+      }, { passive: false });
     })();
   </script>
 
